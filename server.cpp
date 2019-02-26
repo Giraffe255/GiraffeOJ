@@ -1,6 +1,7 @@
 #include <iostream>
-#include "compile.hpp"
 #include "httplib.h"
+#include "compile.hpp"
+#include <jsoncpp/json/json.h>
 
 int main() {
     using namespace httplib;
@@ -12,15 +13,17 @@ int main() {
     // 路由
     server.Get("/comepile" , [](const Request& req , Response& resp){
                // 根据具体问题场景，根据请求，计算出响应结果
-               (void)req;
-               // 如何从 req 中获取到 json 请求，json 如何和 http 协议结合，
-               // json 如何进行解析和构造？
-               // 在这里调用 CompileAndRun
-               std::string req_json; // 从 req 对象中获取
-               std::string resp_json; // resp_json 放到响应中
-               Compiler::CompileAndRun(req_json , &resp_json);
-               resp.set_content(resp_json , "test/plain");
-               });
+        (void)req;
+        // TODO 如何从 req 中获取到 json 请求，json 如何和 http 协议结合，
+        // json 如何进行解析和构造 ？json 的第三方库?
+        // 在这里调用 CompileAndRun
+        Json::Value req_json; // 从 req 对象中获取
+        Json::Value resp_json; // resp_json 放到响应中
+        Compiler::CompileAndRun(req_json , &resp_json);
+        // 需要把 Json::Value 对象序列化成一个字符串，才能返回
+        Json::FastWriter writer;
+        resp.set_content(writer.write(resp_json) , "test/plain");
+    });
     server.listen("0.0.0.0" , 9092);
     return 0;
 }

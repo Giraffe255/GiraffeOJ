@@ -65,7 +65,7 @@ inline std::ostream& Log(Level level , const std::string& file_name , int line_n
     return std::cout;
 }
 
-#define LOG(level) log(level , __FILE__ , __LINE__)
+#define LOG(level) Log(level , __FILE__ , __LINE__)
 
 /////////////////////////////////////
 // 准备文件相关工具类
@@ -98,10 +98,3 @@ public:
         return true;
     }
 };
-
-
-
-
-
-
-
