@@ -2,10 +2,12 @@
 #include <cstdlib>
 #include <stdint.h>
 #include <iostream>
+#include <unordered_map>
 #include <fstream>
+#include <vector>
 #include <string>
 #include <sys/time.h>
-
+#include <boost/algorithm/string.hpp>
 
 ////////////////////////////////////
 // 准备一个时间戳获取工具
@@ -98,3 +100,60 @@ public:
         return true;
     }
 };
+
+//////////////////////////////////////
+// URL / body 解析模块
+//////////////////////////////////////
+
+// 字符串切分？
+// 1.strtok()
+// 2.stringstream
+// 3.boost split 函数
+class StringUtil {
+public:
+    static void Split(const std::string& input , const std::string& split_char , std::vector<std::string>* output) {
+        boost::split(*output , input , boost::is_any_of(split_char) , boost::token_compress_off);
+    }
+};
+
+class UrlUtil {
+public:
+    static void ParseBody(const std::string& body ; std::unordered_map<std::string , std::string>* params) {
+        // 1.先对这里的 body 字符串切分成键值对的形式；
+        //   a）先按照 & 切分
+        //   b）再按照 = 切分
+        std::vector<std::string> kvs;
+        StringUtil::Split(body , "&" , &kvs);
+        for (size_t i = 0 ; i < kvs.size() ; ++i) {
+            std::vector<std::string> kv;
+            // kvs[i]里面存的是一个键值对
+            StringUtil::(kvs[i] , "=" , &kv);
+
+        }
+        // 2.对这里的键值对进行 urldecode
+        
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
